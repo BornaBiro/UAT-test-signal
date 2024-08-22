@@ -4,6 +4,58 @@
 
 This low power UAT test source is designed for a lab or an aircraft hangar use only.
 
+## Disclaimer2
+This is updated version of the project, since original one had some issues, described in the next paragraphs.
+### Issue no1 - Could not build
+This is the first issue - following Build Instructions I simply could not build the project. Project Dependency for TI RTOS was completly missing from the repo?! I created one on the Web TI CCS along with the empty project and linked it to the UAT project. Hitting "Build" again yield in error prompting me to use Desktop Version of the CCS. After few hours downloading, installing and setuping everything, got the new error on the build saying that some tms470 dependency was missing. Google and ChatGPT weren't very useful, so what I did is create new empty Project along with TI RTOS and just added all source files from the original project (except UAT_test_signal.c, I copied everything into empty.c, yeah I know very meaningful project name xD). Build was finally successfull!
+
+### Issue no2 - Wrong transmit frequency
+For some reason transmit frequency was 915MHz (see images below), but it needs to be at 978MHz. I downloaded and installed SmartRF Studio 7, selected CC1310 device, imported parameters from smartrf_settings/smartrf_settings.c, except the frequency. Frequency was set to 978MHz. Only values that changed were at `rfc_CMD_PROP_RADIO_DIV_SETUP_t`
+```
+.centerFreq = 0x03D2,
+.intFreq = 0x0B33,
+```
+and at `rfc_CMD_FS_t`
+```
+.frequency = 0x03D2,
+```
+Now the CC1310 is transmitting data at 978MHz. **I did not test if the transmitted data is correct, since I accidently destroyed one CC1310.**
+
+<p align="center">
+  <img width="800" src="https://raw.githubusercontent.com/BornaBiro/UAT-test-signal/fixed/notes/pics/RigolDS0.png">
+  <br>
+    <b>Wrong transmit frequency - 915MHz</b>
+</p>
+<br>
+
+<p align="center">
+  <img width="800" src="https://raw.githubusercontent.com/BornaBiro/UAT-test-signal/fixed/notes/pics/RigolDS1.png">
+  <br>
+    <b>Wrong transmit frequency - 915MHz, but nothing on 978MHz (check the Ax cursor!)</b>
+</p>
+<br>
+
+<p align="center">
+  <img width="800" src="https://raw.githubusercontent.com/BornaBiro/UAT-test-signal/fixed/notes/pics/RigolDS2.png">
+  <br>
+    <b>Fixed transmit frequency - wide RBW</b>
+</p>
+<br>
+
+<p align="center">
+  <img width="800" src="https://raw.githubusercontent.com/BornaBiro/UAT-test-signal/fixed/notes/pics/RigolDS3.png">
+  <br>
+    <b>Fixed transmit frequency - narrow RBW</b>
+</p>
+<br>
+
+<p align="center">
+  <img width="800" src="https://raw.githubusercontent.com/BornaBiro/UAT-test-signal/fixed/notes/pics/RigolDS4.png">
+  <br>
+    <b>Fixed transmit frequency - wide RBW</b>
+</p>
+<br>
+
 ## Legitimate use
 
 Radio being used in the project is rated for 14 dBm (25 mW) of maximum transmit power.<br>
@@ -51,10 +103,46 @@ Number|Part|Qty|Picture|Source
 
 ### Build instructions
 
-1) either:
-- download this CCS project from GitHub, then upload it into your [TI CCS Cloud IDE](https://dev.ti.com/), or ;
-- if you have a GitHub account: "fork" this project into your GitHub space, then import directly into TI CCS Cloud IDE.
-2) build, then run the firmware on your CC1310 hardware with assistance of [TI Cloud Agent](http://processors.wiki.ti.com/index.php/TI_Cloud_Agent) and [TI Cloud Agent Bridge](https://chrome.google.com/webstore/detail/ticloudagent-bridge/pfillhniocmjcapelhjcianojmoidjdk) plug-in for Google Chrome browser.
+~~1) either:~~
+~~- download this CCS project from GitHub, then upload it into your [TI CCS Cloud IDE](https://dev.ti.com/), or ;~~
+~~- if you have a GitHub account: "fork" this project into your GitHub space, then import directly into TI CCS Cloud IDE.~~
+~~2) build, then run the firmware on your CC1310 hardware with assistance of [TI Cloud Agent](http://processors.wiki.ti.com/index.php/TI_Cloud_Agent) and [TI Cloud Agent Bridge](https://chrome.google.com/webstore/detail/ticloudagent-bridge/pfillhniocmjcapelhjcianojmoidjdk) plug-in for Google Chrome browser.~~ 
+
+1. Create the account on [TI Developer Zone](https://dev.ti.com/)
+2. Navigate down to the All Available Tools and select CCS Cloud
+3. Open it and wait until Web IDE is fully loaded
+4. File->Import Projects, click on Browse and select `tirtos_builds_CC1310_LAUNCHXL_release_ccs` folder
+5. Do the same thing for `empty_CC1310_LAUNCHXL_tirtos_ccs`
+6. Click on Project->Build All
+7. In the folder `empty_CC1310_LAUNCHXL_tirtos_ccs` there should be Debug folder. Open in, find the file called `empty_CC1310_LAUNCHXL_tirtos_ccs.out`. Right-click, select download.
+8. Upload it on the CC1310 IC using your favorite tool (my choice was OpenOCD and FT232L as "Debug Probe")
+
+## Code upload
+As prev. mentioned, I use OpenOCD as my upload tool. It's free and the probe is cheap (FT232L breakout). It's not perfect, but it does work (it's slow and kinda buggy, but hey it cheap!).
+
+1. Get OpenOCD from [Github repo](https://github.com/openocd-org/openocd) - Download release. I used v0.12.0 from release page
+2. Extract it on C:\OpenOCD
+3. Add PATH to the System Environment Variables to the OpenOCD.
+4. Get Windows Terminal (commands can be run with CMD, but I used to run them from the Windows Terminal).
+5. Go to C:\OpenOCD\bin and create `target` and `interface` folders.
+6. In `interface` folder paste all files from [interface folder](https://github.com/openocd-org/openocd/tree/master/tcl/interface)
+7. In `target` folder paste all files from [target folder](https://github.com/openocd-org/openocd/tree/master/tcl/target)
+8. Get FT232R/FT232RL breakout. Get the [Zadig](https://zadig.akeo.ie/). Select Options->List All devices. Select from the drop down menu FT232R USB UART. Select libusbK and click on "Replace Driver". If you need to return driver to the previous state (to FT232R works as USB UART select WinUSB and "Replace Driver").
+9. Open one terminal and run this command
+`openocd -s tcl/ -f interface/ft232r.cfg -c "adapter speed 2500" -c "transport select jtag" -c "reset_config srst_only" -f target/ti_cc13x0.cfg`. It should open telnet. **Note:** Check if the telent is enabled, open second Windows Terminal and run telnet command. If failed, goto Control Panel->Program and Features, at the left side click on Turn Windows feruates On or Off, scroll down to the Telnet and enable it.
+10. In the second Windows Terminal run `telnet localhost 4444`. If connected run `reset halt`. It should halt the CPU core. If successfull, run `flash write_image erase [path_to_image_file] 0x00000000` for example `flash write_image erase C:/empty_CC1310_LAUNCHXL_tirtos_ccs_new.out 0x00000000`. Press enter. **NOTE NOTE NOTE:** It will look like nothing is happenning, but in fact, it is programming device. It can take up to 2 minutes to program it. After programming is successfull, run `reset run` and `shutdown`. Powercycle target device.
+11. Done! Your device sends data every 500ms. Check DIO7 for toogle. If the pin is toggling, it is transmisstion data on every pin state change.
+
+## FTDI FT232R <-> CC310 Connections
+|CC1310 GPIO|CC1310 pin|FT232R Breakout|
+---|---|---
+|TMSC|21|CTS|
+|TCKC|22|TXD|
+|TDO (DIO16)|23|RTS|
+|TDI (DIO17)|24|RXD|
+|RESET|32|DTR|
+
+FT232R JTAG pinout can be found [here](https://openocd.org/doc/html/Debug-Adapter-Configuration.html). Search for `Interface Driver: ft232r`.
 
 ## Validation
 
