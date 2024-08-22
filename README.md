@@ -22,35 +22,35 @@ and at `rfc_CMD_FS_t`
 Now the CC1310 is transmitting data at 978MHz. **I did not test if the transmitted data is correct, since I accidently destroyed one CC1310.**
 
 <p align="center">
-  <img width="800" src="https://raw.githubusercontent.com/BornaBiro/UAT-test-signal/fixed/notes/pics/RigolDS0.png">
+  <img width="800" src="https://raw.githubusercontent.com/BornaBiro/UAT-test-signal/master/notes/pics/RigolDS0.png">
   <br>
     <b>Wrong transmit frequency - 915MHz</b>
 </p>
 <br>
 
 <p align="center">
-  <img width="800" src="https://raw.githubusercontent.com/BornaBiro/UAT-test-signal/fixed/notes/pics/RigolDS1.png">
+  <img width="800" src="https://raw.githubusercontent.com/BornaBiro/UAT-test-signal/master/notes/pics/RigolDS1.png">
   <br>
     <b>Wrong transmit frequency - 915MHz, but nothing on 978MHz (check the Ax cursor!)</b>
 </p>
 <br>
 
 <p align="center">
-  <img width="800" src="https://raw.githubusercontent.com/BornaBiro/UAT-test-signal/fixed/notes/pics/RigolDS2.png">
+  <img width="800" src="https://raw.githubusercontent.com/BornaBiro/UAT-test-signal/master/notes/pics/RigolDS2.png">
   <br>
     <b>Fixed transmit frequency - wide RBW</b>
 </p>
 <br>
 
 <p align="center">
-  <img width="800" src="https://raw.githubusercontent.com/BornaBiro/UAT-test-signal/fixed/notes/pics/RigolDS3.png">
+  <img width="800" src="https://raw.githubusercontent.com/BornaBiro/UAT-test-signal/master/notes/pics/RigolDS3.png">
   <br>
     <b>Fixed transmit frequency - narrow RBW</b>
 </p>
 <br>
 
 <p align="center">
-  <img width="800" src="https://raw.githubusercontent.com/BornaBiro/UAT-test-signal/fixed/notes/pics/RigolDS4.png">
+  <img width="800" src="https://raw.githubusercontent.com/BornaBiro/UAT-test-signal/master/notes/pics/RigolDS4.png">
   <br>
     <b>Fixed transmit frequency - wide RBW</b>
 </p>
