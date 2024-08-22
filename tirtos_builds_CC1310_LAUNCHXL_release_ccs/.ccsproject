@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?ccsproject version="1.0"?>
+<projectOptions>
+	<ccsVariant value="50:Theia-based"/>
+	<ccsVersion value="51.4.0"/>
+	<deviceFamily value="TMS470"/>
+	<createSlaveProjects value=""/>
+	<ignoreDefaultDeviceSettings value="true"/>
+	<ignoreDefaultCCSSettings value="true"/>
+	<templateProperties value="id=tirtos_builds_CC1310_LAUNCHXL_release_ccs.projectspec.tirtos_builds_CC1310_LAUNCHXL_release_ccs,products=com.ti.SIMPLELINK_CC13X0_SDK,xdcToolsVersion=3.51.999,target=ti.targets.arm.elf.M3,platform=ti.platforms.simplelink:CC1310F128,buildProfile=release,configuroOptions= --compileOptions &quot; -DDeviceFamily_CC13X0 &quot;"/>
+	<connection value="common/targetdb/connections/TIXDS110_Connection.xml"/>
+	<origin value="/mnt/tirex-content/simplelink_cc13x0_sdk_4_20_02_07/kernel/tirtos/builds/CC1310_LAUNCHXL/release/ccs/tirtos_builds_CC1310_LAUNCHXL_release_ccs.projectspec"/>
+	<filesToOpen value=""/>
+</projectOptions>
