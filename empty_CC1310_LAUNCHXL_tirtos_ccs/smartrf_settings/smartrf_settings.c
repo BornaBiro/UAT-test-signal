@@ -134,7 +134,7 @@ rfc_CMD_PROP_RADIO_DIV_SETUP_t RF_cmdPropRadioDivSetup =
     .txPower = 0x003F,
     .pRegOverride = pOverrides,
     .centerFreq = 0x03D2,
-    .intFreq = 0x0B33,
+    .intFreq = 0x8000,
     .loDivider = 0x05
 };
 
