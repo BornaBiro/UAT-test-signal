@@ -19,7 +19,7 @@ and at `rfc_CMD_FS_t`
 ```
 .frequency = 0x03D2,
 ```
-Now the CC1310 is transmitting data at 978MHz. **I did not test if the transmitted data is correct, since I accidently destroyed one CC1310.**
+Now the CC1310 is transmitting data at 978MHz. ~~**I did not test if the transmitted data is correct, since I accidently destroyed one CC1310.**~~ I tested with RTL SDR and dump978 and [UAT-Receiver](https://github.com/lyusupov/SoftRF/tree/master/software/firmware/source/UAT_Receiver) and it works!
 
 <p align="center">
   <img width="800" src="https://raw.githubusercontent.com/BornaBiro/UAT-test-signal/master/notes/pics/RigolDS0.png">
